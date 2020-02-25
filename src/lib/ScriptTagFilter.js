@@ -1,37 +1,50 @@
-import Utilities from "./Utilities";
+import Utilities from './Utilities';
 import Filter from './Filter';
 
 export default class ScriptTagFilter extends Filter {
-  
-  constructor() {
-    super();
-  }
 
-  init() {
-    this.filterTags();
-  }
+    constructor() {
+        super();
+    }
 
-  filterTags() {
-    Utilities.ready(() => {
-      var blacklist = super.createBlacklist('script-tag');
-      var scriptTags = document.querySelectorAll('script[type="text/plain"]');
-      
-      for (var scriptTag of scriptTags) {
-        if (blacklist.indexOf(scriptTag.dataset.consent) < 0) {
-          var newtag = document.createElement('script');
-          var parentNode = scriptTag.parentNode;
-          
-          scriptTag.type = 'text/javascript';
+    init() {
+        this.filterTags();
+    }
 
-          for(var attribute of scriptTag.attributes) {
-            newtag.setAttribute(attribute.nodeName, attribute.nodeValue);
-          }
+    filterTags() {
+        Utilities.ready(() => {
 
-          newtag.innerHTML = scriptTag.innerHTML;
-          parentNode.insertBefore(newtag,scriptTag);
-          parentNode.removeChild(scriptTag);
-        }
-      }
-    });
-  }
+            let searchCatsMap = super.createSearchCatsMap('script-tag');
+
+            let scriptTags = document.querySelectorAll('script[type="text/plain"]');
+
+            for (let scriptTag of scriptTags) {
+                let cat = searchCatsMap[scriptTag.dataset.consent];
+                if (cat !== undefined) {
+                    let newTag = document.createElement('script');
+                    let parentNode = scriptTag.parentNode;
+
+                    scriptTag.type = 'text/javascript';
+
+                    for (let attribute of scriptTag.attributes) {
+                        newTag.setAttribute(attribute.nodeName, attribute.nodeValue);
+                    }
+
+                    newTag.innerHTML = scriptTag.innerHTML;
+
+                    if (window.cookieConsent.config.categories[cat].needed === true || window.cookieConsent.config.categories[cat].wanted === true) {
+                        parentNode.insertBefore(newTag, scriptTag);
+                        parentNode.removeChild(scriptTag);
+                    } else {
+                        window.cookieConsent.buffer.replaceTag.push({
+                            'category': cat,
+                            'parentNode': parentNode,
+                            'oldTag': scriptTag,
+                            'newTag': newTag
+                        });
+                    }
+                }
+            }
+        });
+    }
 }

@@ -1,33 +1,54 @@
-import Utilities from "./Utilities";
+import Utilities from './Utilities';
 
-export default class Filter  {
+export default class Filter {
 
-  createBlacklist(type) {
-    var services = {};
-    for(var service in window.CookieConsent.config.services) {
-      if (window.CookieConsent.config.services[service].type === type) {
-        if(window.CookieConsent.config.categories[window.CookieConsent.config.services[service].category].needed === false) {
-          if (window.CookieConsent.config.categories[window.CookieConsent.config.services[service].category].wanted === false) {
-            services[service] = window.CookieConsent.config.services[service];
-          }
+    createBlacklist(type) {
+
+        let blacklist = [];
+
+        let confCats = window.cookieConsent.config.categories;
+        let confServices = window.cookieConsent.config.services;
+
+        for (let serviceKey in confServices) {
+            if (confServices.hasOwnProperty(serviceKey)) {
+                let confService = confServices[serviceKey];
+                if (confService.type === type && confCats[confService.category].needed === false && confCats[confService.category].wanted === false) {
+                    let searchType = Utilities.objectType(confService.search);
+                    if (searchType === 'String') {
+                        blacklist.push(confService.search);
+                    } else if (searchType === 'Array') {
+                        for (let i = 0; i < confService.search.length; i++) {
+                            blacklist.push(confService.search[i]);
+                        }
+                    }
+                }
+            }
         }
-      }
+
+        return blacklist;
     }
 
-    var blacklist = [];
+    createSearchCatsMap(type) {
+        let searchCats = {};
+        let confServices = window.cookieConsent.config.services;
 
-    for(var service in services) {
-      var type = Utilities.objectType(services[service].search);
-      if (type === 'String') {
-        blacklist.push(services[service].search);
-      } else if(type === 'Array') {
-        for (let i = 0; i < services[service].search.length; i++) {
-          blacklist.push(services[service].search[i]);
+        for (let serviceKey in confServices) {
+            if (confServices.hasOwnProperty(serviceKey)) {
+                let confService = confServices[serviceKey];
+                if (confService.type === type) {
+                    let searchType = Utilities.objectType(confService.search);
+                    if (searchType === 'String') {
+                        searchCats[confService.search] = confService.category;
+                    } else if (searchType === 'Array') {
+                        for (let i = 0; i < confService.search.length; i++) {
+                            searchCats[confService.search[i]] = confService.category;
+                        }
+                    }
+                }
+            }
         }
-      }
-    }
 
-    return blacklist;
-  }
+        return searchCats;
+    }
 
 }

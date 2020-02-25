@@ -1,50 +1,56 @@
-import Utilities from "./Utilities";
+import Utilities from './Utilities';
 
 export default class RemoveCookies {
 
-  init() {
-    this.removeUnwantedCookies();
-  }
-
-  removeUnwantedCookies() {
-    let cookieList = [];
-    let config = window.CookieConsent.config;
-
-    document.cookie.split(';').map(function(a){
-      cookieList.push(a.split('=')[0].replace(/(^\s*)|(\s*&)/, ''));
-    });
-
-    for(let service in config.services) {
-      if (Utilities.objectType(config.services[service].cookies) === 'Array') {
-        // Remove cookies if they are not wanted by user
-        if (! config.categories[config.services[service].category].wanted) {
-          for(let i in config.services[service].cookies) {
-            let type = Utilities.objectType(config.services[service].cookies[i].name);
-            if (type === 'String') {
-              if (cookieList.indexOf(config.services[service].cookies[i].name) > -1) {
-                this.removeCookie(config.services[service].cookies[i]);
-              }
-            } else if (type === 'RegExp') {
-              // Searching cookie list for cookies matching specified RegExp
-              let cookieDef = config.services[service].cookies[i];
-              for (let c in cookieList) {
-                if (cookieList[c].match(cookieDef.name)) {
-                  this.removeCookie({
-                    name: cookieList[c],
-                    domain: Utilities.objectType(cookieDef.domain) === 'String' ? cookieDef.domain : null
-                  });
-                }
-              }
-            }
-          }
-        }
-      }
+    init() {
+        this.removeUnwantedCookies();
     }
-  }
 
-  removeCookie(cookie) {
-    // Removing cookies from domain and .domain
-    let domain = Utilities.objectType(cookie.domain) === 'String' ? `domain=${cookie.domain};` : '';
-    document.cookie = `${cookie.name}=; expires=Thu, 01 Jan 1980 00:00:00 UTC; ${domain} path=/;`;
-  }
+    removeUnwantedCookies() {
+        let cookieList = [];
+
+        let configCats = window.cookieConsent.config.categories;
+        let configServices = window.cookieConsent.config.services;
+
+        document.cookie.split(';').map(function(a) {
+            cookieList.push(a.split('=')[0].replace(/(^\s*)|(\s*&)/, ''));
+        });
+
+        /*jshint -W073 */
+        for (let serviceKey in configServices) {
+            if (configServices.hasOwnProperty(serviceKey)) {
+                let confService = configServices[serviceKey];
+                if (Utilities.objectType(confService.cookies) === 'Array' &&
+                    !configCats[confService.category].wanted) {
+                    // Remove cookies if they are not wanted by user
+                    for (let cookieDef of confService.cookies) {
+                        let type = Utilities.objectType(cookieDef.name);
+                        if (type === 'String') {
+                            if (cookieList.indexOf(cookieDef.name) > -1) {
+                                this.removeCookie(cookieDef);
+                            }
+                        } else if (type === 'RegExp') {
+                            // Searching cookie list for cookies matching specified RegExp
+                            for (let cookieName in cookieList) {
+                                if (cookieDef.name.test(cookieName)) {
+                                    this.removeCookie({
+                                        name: cookieName,
+                                        domain: cookieDef.domain
+                                    });
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        /*jshint +W073 */
+    }
+
+    removeCookie(cookieDef) {
+        // Removing cookies from domain and .domain
+        let domain = Utilities.objectType(cookieDef.domain) === 'String' ? `domain=${cookieDef.domain};` : '';
+        document.cookie = `${cookieDef.name}=; expires=Thu, 01 Jan 1980 00:00:00 UTC; ${domain} path=/;`;
+    }
 }
