@@ -18,8 +18,7 @@ export default class Interface {
                 el('div.ccm__content__body',
                     el('div.ccm__content_text',
                         el('p.bold.emphasize', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTextStrong')),
-                        el('p', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText')),
-                        el('p',
+                        el('p', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText'),
                             (window.cookieConsent.config.modalMainTextMoreLink) ? el('a.grey-color.cc__consent-give', {
                                     href: window.cookieConsent.config.modalMainTextMoreLink,
                                     rel: 'noopener noreferrer'
@@ -142,13 +141,15 @@ export default class Interface {
                         el('p',
                             Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalMainText')
                         ),
+                        (window.cookieConsent.config.modalMainTextMoreLink) ?
                         el('p',
-                            (window.cookieConsent.config.modalMainTextMoreLink) ? el('a.cc__consent-give', {
+                            el('a.cc__consent-give', {
                                     href: window.cookieConsent.config.modalMainTextMoreLink,
                                     rel: 'noopener noreferrer'
                                 },
-                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'learnMore')) : null
-                        )
+                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'learnMore'))
+                        ) :
+                        null
                     ),
                     el('div.ccm__tabs',
                         modalTabGroups()
