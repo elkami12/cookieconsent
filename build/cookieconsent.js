@@ -2852,11 +2852,9 @@ function () {
     key: "init",
     value: function init(configObject) {
       this.setConfiguration(configObject);
-      var removeCookies = new _RemoveCookies.default(); // const insertScriptFilter = new InsertScriptFilter();
-
+      var removeCookies = new _RemoveCookies.default();
       var scriptTagFilter = new _ScriptTagFilter.default();
-      removeCookies.init(); // insertScriptFilter.init();
-
+      removeCookies.init();
       scriptTagFilter.init();
       var UI = new _Interface.default();
       UI.buildInterface(function () {
