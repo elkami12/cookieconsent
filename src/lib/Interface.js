@@ -18,18 +18,25 @@ export default class Interface {
                 el('div.ccm__content__body',
                     el('div.ccm__content_text',
                         el('p.bold.emphasize', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTextStrong')),
-                        el('p', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText'),
-                            (window.cookieConsent.config.modalMainTextMoreLink) ? el('a.grey-color.cc__consent-give', {
+                        el('p',
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText'),
+                            el('a.grey-color.ccb__edit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLinkSetting')),
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText2'),
+                            el('a.grey-color.cc__consent-give', {
                                     href: window.cookieConsent.config.modalMainTextMoreLink,
                                     rel: 'noopener noreferrer'
                                 },
-                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'learnMore')) : null
+                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLearnMore')),
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText3')
                         )
                     )
                 ),
                 el('div.ccm__footer',
-                    el('a.grey-color.ccb__edit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLinkSetting')),
-                    el('button.btn.btn-primary.cc__consent-give', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll'))
+                    el('button.btn.btn-primary.btn-block.btn-lg.cc__consent-give',
+                     Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll'),
+                     el('br.visible-xs-block'),
+                     Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll2')
+                 )
                 )
             )
         );
@@ -141,24 +148,25 @@ export default class Interface {
                         el('p',
                             Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalMainText')
                         ),
-                        (window.cookieConsent.config.modalMainTextMoreLink) ?
+                        el('p',
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalMainText2')
+                        ),
                         el('p',
                             el('a.cc__consent-give', {
                                     href: window.cookieConsent.config.modalMainTextMoreLink,
                                     rel: 'noopener noreferrer'
                                 },
-                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'learnMore'))
-                        ) :
-                        null
+                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalLearnMore'))
+                        )
                     ),
                     el('div.ccm__tabs',
                         modalTabGroups()
                     )
                 ),
                 el('div.ccm__footer',
-                    el('button.btn.btn-default#ccm__footer__consent-modal-submit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current,
+                    el('button.btn.btn-default.ccm__btnlg.ccm__save#ccm__footer__consent-modal-submit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current,
                         'modalBtnSave')),
-                    el('button.btn.btn-primary.cc__consent-give', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalBtnAcceptAll'))
+                    el('button.btn.btn-primary.ccm__btnlg.cc__consent-give', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalBtnAcceptAll'))
                 )
             )
         );
