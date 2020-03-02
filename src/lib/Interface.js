@@ -176,6 +176,20 @@ export default class Interface {
         );
     }
 
+    hideBar() {
+        if (typeof this.elements['bar'] !== 'undefined') {
+            this.elements['bar'].classList.add('ccm--hidden');
+        }
+    }
+
+    hideModal() {
+        this.elements['modal'].classList.remove('ccm--visible');
+    }
+
+    showModal() {
+        this.elements['modal'].classList.add('ccm--visible');
+    }
+
     modalRedrawIcons() {
         var tabGroups = this.elements['modal'].querySelectorAll('.ccm__tabgroup');
 
@@ -222,16 +236,16 @@ export default class Interface {
 
         Utilities.ready(function() {
 
-            that.render('bar', that.buildBar(), (bar) => {
+            if (!window.cookieConsent.config.cookieExists) {
+                that.render('bar', that.buildBar(), (bar) => {
 
-                // Show the bar after a while
-                if (!window.cookieConsent.config.cookieExists) {
+                    // Show the bar after a while
                     setTimeout(() => {
                         bar.classList.remove('ccm--hidden');
                     }, window.cookieConsent.config.barTimeout);
-                }
-            });
 
+                });
+            }
             that.render('modal', that.buildModal());
 
             callback();
@@ -260,8 +274,8 @@ export default class Interface {
                     this.setCookie(cookie);
                 });
 
-                this.elements['bar'].classList.add('ccm--hidden');
-                this.elements['modal'].classList.remove('ccm--visible');
+                this.hideBar();
+                this.hideModal();
 
                 this.modalRedrawIcons();
 
@@ -274,8 +288,8 @@ export default class Interface {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                this.elements['bar'].classList.add('ccm--hidden');
-                this.elements['modal'].classList.add('ccm--visible');
+                this.hideBar();
+                this.showModal();
             });
         });
 
@@ -332,8 +346,8 @@ export default class Interface {
 
             this.buildCookie((cookie) => {
                 this.setCookie(cookie, () => {
-                    this.elements['modal'].classList.remove('ccm--visible');
-                    this.elements['bar'].classList.add('ccm--hidden');
+                    this.hideModal();
+                    this.hideBar();
                 });
             });
 
