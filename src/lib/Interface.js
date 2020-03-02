@@ -10,7 +10,8 @@ export default class Interface {
 
     buildBar() {
 
-        return el('div#cconsent-bar.cconsent-modal.ccb--hidden',
+        return el('div#cconsent-bar.ccm__modal.ccm--hidden',
+            el('a.ccm__bg.cc__consent-give', '\xa0'),
             el('div.ccm__content',
                 el('div.ccm__content__heading',
                     el('h2', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTitle'))
@@ -33,10 +34,10 @@ export default class Interface {
                 ),
                 el('div.ccm__footer',
                     el('button.btn.btn-primary.btn-block.btn-lg.cc__consent-give',
-                     Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll'),
-                     el('br.visible-xs-block'),
-                     Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll2')
-                 )
+                        Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll'),
+                        el('br.visible-xs-block'),
+                        Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barBtnAcceptAll2')
+                    )
                 )
             )
         );
@@ -138,7 +139,8 @@ export default class Interface {
             return contentItems;
         }
 
-        return el('div#cconsent-modal.cconsent-modal',
+        return el('div#cconsent-modal.ccm__modal',
+            el('div.ccm__bg', '\xa0'),
             el('div.ccm__content',
                 el('div.ccm__content__heading',
                     el('h2', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalMainTitle'))
@@ -164,9 +166,11 @@ export default class Interface {
                     )
                 ),
                 el('div.ccm__footer',
-                    el('button.btn.btn-default.ccm__btnlg.ccm__save#ccm__footer__consent-modal-submit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current,
+                    el('button.btn.btn-default.ccm__btnlg.ccm__save#ccm__footer__consent-modal-submit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language
+                        .current,
                         'modalBtnSave')),
-                    el('button.btn.btn-primary.ccm__btnlg.cc__consent-give', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'modalBtnAcceptAll'))
+                    el('button.btn.btn-primary.ccm__btnlg.cc__consent-give', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current,
+                        'modalBtnAcceptAll'))
                 )
             )
         );
@@ -223,7 +227,7 @@ export default class Interface {
                 // Show the bar after a while
                 if (!window.cookieConsent.config.cookieExists) {
                     setTimeout(() => {
-                        bar.classList.remove('ccb--hidden');
+                        bar.classList.remove('ccm--hidden');
                     }, window.cookieConsent.config.barTimeout);
                 }
             });
@@ -256,7 +260,7 @@ export default class Interface {
                     this.setCookie(cookie);
                 });
 
-                this.elements['bar'].classList.add('ccb--hidden');
+                this.elements['bar'].classList.add('ccm--hidden');
                 this.elements['modal'].classList.remove('ccm--visible');
 
                 this.modalRedrawIcons();
@@ -270,7 +274,7 @@ export default class Interface {
                 ev.preventDefault();
                 ev.stopPropagation();
 
-                this.elements['bar'].classList.add('ccb--hidden');
+                this.elements['bar'].classList.add('ccm--hidden');
                 this.elements['modal'].classList.add('ccm--visible');
             });
         });
@@ -329,7 +333,7 @@ export default class Interface {
             this.buildCookie((cookie) => {
                 this.setCookie(cookie, () => {
                     this.elements['modal'].classList.remove('ccm--visible');
-                    this.elements['bar'].classList.add('ccb--hidden');
+                    this.elements['bar'].classList.add('ccm--hidden');
                 });
             });
 
@@ -341,25 +345,18 @@ export default class Interface {
     writeBufferToDOM() {
 
         let action;
-        while ((action = window.cookieConsent.buffer.appendChild.shift()) !== undefined) {
-            if (window.cookieConsent.config.categories[action.category].wanted === true) {
-                Node.prototype.appendChild.apply(action.this, action.arguments);
-            }
-        }
+        let newReplaceTagArr = [];
 
-        while ((action = window.cookieConsent.buffer.insertBefore.shift()) !== undefined) {
-            if (window.cookieConsent.config.categories[action.category].wanted === true) {
-                action.arguments[1] = (action.arguments[0].parentNode === null) ? action.this.lastChild : action.arguments[1];
-                Node.prototype.insertBefore.apply(action.this, action.arguments);
-            }
-        }
-
-        while ((action = window.cookieConsent.buffer.replaceTag.shift()) !== undefined) {
+        for (let i = 0; i < window.cookieConsent.buffer.replaceTag.length; i++) {
+            action = window.cookieConsent.buffer.replaceTag[i];
             if (window.cookieConsent.config.categories[action.category].wanted === true) {
                 Node.prototype.insertBefore.apply(action.parentNode, [action.newTag, action.oldTag]);
                 Node.prototype.removeChild.apply(action.parentNode, [action.oldTag]);
+            } else {
+                newReplaceTagArr.push(action);
             }
         }
+        window.cookieConsent.buffer.replaceTag = newReplaceTagArr;
 
     }
 

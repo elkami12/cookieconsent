@@ -7,8 +7,6 @@ export default class CookieConsent {
 
     constructor() {
         this.buffer = {
-            appendChild: [],
-            insertBefore: [],
             replaceTag: [],
         };
         this.config = {};
