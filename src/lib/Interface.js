@@ -193,7 +193,8 @@ export default class Interface {
     modalRedrawIcons() {
         var tabGroups = this.elements['modal'].querySelectorAll('.ccm__tabgroup');
 
-        for (let tabGroup of tabGroups) {
+        for (let i = 0; i < tabGroups.length; i++) {
+            let tabGroup = tabGroups[i];
             if (window.cookieConsent.config.categories[tabGroup.dataset.category].checked) {
                 if (!tabGroup.classList.contains('ccm__tabgroup--checked')) {
                     tabGroup.classList.add('ccm__tabgroup--checked');
@@ -256,7 +257,8 @@ export default class Interface {
         // If you click Accept all cookies
         var buttonConsentGive = document.querySelectorAll('.cc__consent-give');
 
-        for (let button of buttonConsentGive) {
+        for (let i = 0; i < buttonConsentGive.length; i++) {
+            let button = buttonConsentGive[i];
             button.addEventListener('click', () => {
 
                 let cats = window.cookieConsent.config.categories;
@@ -404,7 +406,14 @@ export default class Interface {
     }
 
     setCookie(cookie, callback) {
-        document.cookie = `cconsent=${JSON.stringify(cookie)}; expires=Thu, 01 Jan 2099 00:00:00 UTC; path=/;`;
+        let dt = new Date();
+        dt = new Date(dt.setMonth(dt.getMonth() + 13));
+
+        cookie.expiration = dt.getTime();
+
+        localStorage.setItem('cconsent', JSON.stringify(cookie));
+        document.cookie = `cconsent=${JSON.stringify(cookie)}; path=/; expires=${dt.toUTCString()};`;
+
         if (callback) {
             callback();
         }

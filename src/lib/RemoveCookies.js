@@ -23,7 +23,8 @@ export default class RemoveCookies {
                 if (Utilities.objectType(confService.cookies) === 'Array' &&
                     !configCats[confService.category].wanted) {
                     // Remove cookies if they are not wanted by user
-                    for (let cookieDef of confService.cookies) {
+                    for (let cki = 0; cki < confService.cookies.length; cki++) {
+                        let cookieDef = confService.cookies[cki];
                         let type = Utilities.objectType(cookieDef.name);
                         if (type === 'String') {
                             if (cookieList.indexOf(cookieDef.name) > -1) {

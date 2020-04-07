@@ -18,7 +18,8 @@ export default class ScriptTagFilter extends Filter {
 
             let scriptTags = document.querySelectorAll('script[type="text/plain"]');
 
-            for (let scriptTag of scriptTags) {
+            for (let tagi = 0; tagi < scriptTags.length; tagi++) {
+                let scriptTag = scriptTags[tagi];
                 let cat = searchCatsMap[scriptTag.dataset.consent];
                 if (cat !== undefined) {
                     let newTag = document.createElement('script');
@@ -26,7 +27,8 @@ export default class ScriptTagFilter extends Filter {
 
                     scriptTag.type = 'text/javascript';
 
-                    for (let attribute of scriptTag.attributes) {
+                    for (let aatri = 0; aatri < scriptTag.attributes.length; aatri++) {
+                        let attribute = scriptTag.attributes[aatri];
                         newTag.setAttribute(attribute.nodeName, attribute.nodeValue);
                     }
 
