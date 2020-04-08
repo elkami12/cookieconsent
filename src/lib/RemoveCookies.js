@@ -32,7 +32,9 @@ export default class RemoveCookies {
                             }
                         } else if (type === 'RegExp') {
                             // Searching cookie list for cookies matching specified RegExp
-                            for (let cookieName in cookieList) {
+
+                            for (let ci = 0; ci < cookieList.length; ci++) {
+                                let cookieName = cookieList[ci];
                                 if (cookieDef.name.test(cookieName)) {
                                     this.removeCookie({
                                         name: cookieName,
