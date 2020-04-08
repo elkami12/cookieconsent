@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "parcel src/index.html --no-hmr",
     "build": "npm run build:nomin && npm run build:min && npm run cpbuild",
-    "build:nomin": "parcel build src/index.js --out-dir build --public-url . --out-file cookieconsent.js --no-minify",
-    "build:min": "parcel build src/index.js --out-dir build --public-url . --out-file cookieconsent.min.js",
-    "cpbuild": "cp build/*.* ../lesclefs-web/lesclefs/components/cookieconsent/build/."
+    "build:nomin": "parcel build src/index.js --out-dir build --public-url . --out-file cookieconsent.js --no-minify --no-source-maps",
+    "build:min": "parcel build src/index.js --out-dir build --public-url . --out-file cookieconsent.min.js --no-source-maps",
+    "cpbuild": "cp build/*.js ../lesclefs-web/lesclefs/components/cookieconsent/build/."
   },
   "repository": {
     "type": "git",
