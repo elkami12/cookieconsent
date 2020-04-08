@@ -25,16 +25,17 @@ export default class ScriptTagFilter extends Filter {
                     let newTag = document.createElement('script');
                     let parentNode = scriptTag.parentNode;
 
-                    scriptTag.type = 'text/javascript';
-
                     for (let aatri = 0; aatri < scriptTag.attributes.length; aatri++) {
                         let attribute = scriptTag.attributes[aatri];
                         newTag.setAttribute(attribute.nodeName, attribute.nodeValue);
                     }
 
                     newTag.innerHTML = scriptTag.innerHTML;
+                    newTag.type = 'text/javascript';
 
-                    if (window.cookieConsent.config.categories[cat].needed === true || window.cookieConsent.config.categories[cat].wanted === true) {
+                    let catCfg = window.cookieConsent.config.categories[cat];
+
+                    if (catCfg.needed === true || catCfg.wanted === true) {
                         parentNode.insertBefore(newTag, scriptTag);
                         parentNode.removeChild(scriptTag);
                     } else {
