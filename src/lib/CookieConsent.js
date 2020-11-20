@@ -14,8 +14,8 @@ export default class CookieConsent {
 
     init(configObject) {
 
-        const botRegex = /bot|crawler|spider|crawling/i;
-        let isBot = botRegex.test(navigator.userAgent);
+        const botRegex = /bot|crawler|spider|crawling|baidu|bingpreview|mediapartners-google|apis-google|teoma|slurp/i;
+        let isBot = !!navigator.userAgent && botRegex.test(navigator.userAgent);
 
         this.setConfiguration(configObject, isBot);
 
