@@ -18,17 +18,19 @@ export default class Interface {
                 ),
                 el('div.ccm__content__body',
                     el('div.ccm__content_text',
-                        el('p.bold.emphasize', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTextStrong')),
-                        el('p',
-                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText'),
-                            el('a.grey-color.ccb__edit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLinkSetting')),
-                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText2'),
+                        el('p.bold.emphasize',
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTextStrong1'),
                             el('a.grey-color.cc__consent-give', {
                                     href: window.cookieConsent.config.modalMainTextMoreLink,
                                     rel: 'noopener noreferrer'
                                 },
-                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLearnMore')),
-                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText3')
+                                Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barPolitics')),
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainTextStrong2')
+                        ),
+                        el('p',
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText1'),
+                            el('a.grey-color.ccb__edit', Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barLinkSetting')),
+                            Language.getTranslation(window.cookieConsent.config, window.cookieConsent.config.language.current, 'barMainText2')
                         )
                     )
                 ),

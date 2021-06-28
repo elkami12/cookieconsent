@@ -58,7 +58,8 @@ export default class CookieConsent {
     cookieToConfig() { // jshint maxcomplexity: 20
 
         function removeReload() {
-            Utilities.removeCookie();
+            document.cookie = `cconsent=; expires=Thu, 01 Jan 1980 00:00:00 UTC; path=/;`;
+            localStorage.removeItem('cconsent');
             location.reload();
             return false;
         }

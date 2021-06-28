@@ -12,10 +12,6 @@ export default class Utilities {
         return Object.prototype.toString.call(obj).slice(8, -1);
     }
 
-    static removeCookie() {
-        document.cookie = `cconsent=; expires=Thu, 01 Jan 1980 00:00:00 UTC; path=/;`;
-    }
-
     static dispatchEvent(elem, eventName) {
         let event;
 
